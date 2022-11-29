@@ -46,4 +46,18 @@ describe('GET /albums', () => {
     })
 })
 
-describe('GET one album with id')
+describe('GET one album with id', () => {
+    it("/albums/2 route should return album with id 2", async () => {
+        const res = await server.get('/album/2')
+        expect(res.ok).toBeTruthy
+        expect(res.statusCode).toEqual(200)
+        expect(res.body).toEqual({
+            albumId: 1,
+            id: 2,
+            title: 'reprehenderit est deserunt velit ipsam',
+            url: 'https://via.placeholder.com/600/771796',
+            thumbnailUrl: 'https://via.placeholder.com/150/771796'
+        })
+        expect(res.body.length).toEqual(1)
+    })
+})
