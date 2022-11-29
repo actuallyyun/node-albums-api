@@ -62,3 +62,41 @@ describe('GET one album with id', () => {
 
     })
 })
+
+describe('POST /albums to add a new album', () => {
+
+
+    it("POST request to albums/ with newAlbum should 1.return the new album 2./albums route with GET request should return 4 objects with this new album", async () => {
+        const res = await server.post('/albums').send({
+            "albumId": 1,
+            "id": 4,
+            "title": "culpa odio esse rerum omnis laboriosam voluptate repudiandae",
+            "url": "https://via.placeholder.com/600/d32776",
+            "thumbnailUrl": "https://via.placeholder.com/150/d32776"
+        })
+            .set('Accept', 'application/json')
+
+        console.log(res)
+        expect(res.ok).toBeTruthy
+        expect(res.statusCode).toEqual(201)
+        expect(res.body).toEqual({
+            "albumId": 1,
+            "id": 4,
+            "title": "culpa odio esse rerum omnis laboriosam voluptate repudiandae",
+            "url": "https://via.placeholder.com/600/d32776",
+            "thumbnailUrl": "https://via.placeholder.com/150/d32776"
+        })
+        const getRes = await server.get('/albums')
+        expect(getRes.body.length).toEqual(4)
+        expect(getRes.body[3]).toEqual({
+            "albumId": 1,
+            "id": 4,
+            "title": "culpa odio esse rerum omnis laboriosam voluptate repudiandae",
+            "url": "https://via.placeholder.com/600/d32776",
+            "thumbnailUrl": "https://via.placeholder.com/150/d32776"
+        })
+    })
+
+
+
+})
