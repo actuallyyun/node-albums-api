@@ -76,7 +76,6 @@ describe('POST /albums to add a new album', () => {
         })
             .set('Accept', 'application/json')
 
-        console.log(res)
         expect(res.ok).toBeTruthy
         expect(res.statusCode).toEqual(201)
         expect(res.body).toEqual({
@@ -97,6 +96,25 @@ describe('POST /albums to add a new album', () => {
         })
     })
 
+    describe('DELETE albums/:id route', () => {
 
+        it('DELETE request to albums/1 should 1.delete album with id 1 from the json file 2.return 200 status code', async () => {
+            const res = await server.delete('./albums/1')
+            expect(res.statusCode).toEqual(200)
+            expect(res.success).toBeTruthy
+
+            const getAllRes = await server.get('/albums')
+            expect(getAllRes.body.length).toEqual(4)
+            expect(getAllRes.body).includes({
+                albumId: 1,
+                id: 1,
+                title: 'accusamus beatae ad facilis cum similique qui sunt',
+                url: 'https://via.placeholder.com/600/92c952',
+                thumbnailUrl: 'https://via.placeholder.com/150/92c952'
+            }).toBeFalsy
+        })
+
+
+    })
 
 })
