@@ -61,6 +61,11 @@ describe('GET one album with id', () => {
         })
 
     })
+    it('if album with the id is not found,it should return 400 and an error message', async () => {
+        const res = await server.get('/albums/10')
+        expect(res.statusCode).toEqual(400)
+        expect(res.text).toEqual("The item you requested does not exist.")
+    })
 })
 
 describe('POST /albums to add a new album', () => {

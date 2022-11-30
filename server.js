@@ -19,7 +19,12 @@ app.get("/albums", (req, res) => {
 app.get("/albums/:id", (req, res) => {
     const id = req.params.id
     const album = albums.find(album => album.id == id)
-    res.send(album)
+    if (album === undefined) {
+        res.status(400).send("The item you requested does not exist.")
+    } else {
+        res.send(album)
+    }
+
 })
 
 app.post('/albums', (req, res) => {
@@ -34,7 +39,7 @@ app.delete('/albums/:id', (req, res) => {
     //QQQ:What's the best solution to delete an item from database? Which Array method to use?
     const filteredAlbums = albums.filter(album => album.id != id)
     albums = filteredAlbums
-    res.status(200).json({ sucess: true })
+    res.status(200).json({ success: true })
 
 
 })
