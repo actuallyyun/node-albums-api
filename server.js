@@ -4,7 +4,7 @@ const app = express();
 
 app.use(express.json())
 
-const albums = require("./albums.json")
+let albums = require("./albums.json")
 
 app.get('/', (req, res) => {
     res.send('Hello Express')
@@ -28,6 +28,16 @@ app.post('/albums', (req, res) => {
     res.status(201).send(newAlbum)
 })
 
+
+app.delete('/albums/:id', (req, res) => {
+    const id = req.params.id
+    //QQQ:What's the best solution to delete an item from database? Which Array method to use?
+    const filteredAlbums = albums.filter(album => album.id != id)
+    albums = filteredAlbums
+    res.status(200).json({ sucess: true })
+
+
+})
 
 
 app.listen(3000, () => console.log("Server is up and running"))
