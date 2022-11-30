@@ -29,8 +29,14 @@ app.get("/albums/:id", (req, res) => {
 
 app.post('/albums', (req, res) => {
     const newAlbum = req.body
-    albums.push(newAlbum)
-    res.status(201).send(newAlbum)
+    if (albums.find(album => album.id === newAlbum.id)) {
+        return res.status(409).send("You cannot create an album with an exisiting id.")
+    } else {
+        albums.push(newAlbum)
+        res.status(201).send(newAlbum)
+    }
+
+
 })
 
 

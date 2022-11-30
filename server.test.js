@@ -101,6 +101,24 @@ describe('POST /albums to add a new album', () => {
         })
     })
 
+    it("if POST an album with exisiting id, the server should return 409 and information about the error", async () => {
+        const res = await server.post('/albums').send({
+
+            "albumId": 1,
+            "id": 1,
+            "title": "accusamus beatae ad facilis cum similique qui sunt",
+            "url": "https://via.placeholder.com/600/92c952",
+            "thumbnailUrl": "https://via.placeholder.com/150/92c952"
+
+        })
+
+        expect(res.statusCode).toEqual(409)
+        expect(res.text).toEqual("You cannot create an album with an exisiting id.")
+
+        const getRes = await server.get('/albums')
+        expect(getRes.body.length).toEqual(4)
+    })
+
 
 
 })
