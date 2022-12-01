@@ -61,6 +61,11 @@ describe('GET one album with id', () => {
         })
 
     })
+    it('if album with the id is not found,it should return 400 and an error message', async () => {
+        const res = await server.get('/albums/10')
+        expect(res.statusCode).toEqual(400)
+        expect(res.text).toEqual("The item you requested does not exist.")
+    })
 })
 
 describe('POST /albums to add a new album', () => {
@@ -76,7 +81,6 @@ describe('POST /albums to add a new album', () => {
         })
             .set('Accept', 'application/json')
 
-        console.log(res)
         expect(res.ok).toBeTruthy
         expect(res.statusCode).toEqual(201)
         expect(res.body).toEqual({
@@ -97,6 +101,46 @@ describe('POST /albums to add a new album', () => {
         })
     })
 
+    it("if POST an album with exisiting id, the server should return 409 and information about the error", async () => {
+        const res = await server.post('/albums').send({
+
+            "albumId": 1,
+            "id": 1,
+            "title": "accusamus beatae ad facilis cum similique qui sunt",
+            "url": "https://via.placeholder.com/600/92c952",
+            "thumbnailUrl": "https://via.placeholder.com/150/92c952"
+
+        })
+
+        expect(res.statusCode).toEqual(409)
+        expect(res.text).toEqual("You cannot create an album with an exisiting id.")
+
+        const getRes = await server.get('/albums')
+        expect(getRes.body.length).toEqual(4)
+    })
+
+
+
+})
+
+describe('DELETE albums/:id route', () => {
+
+    it('DELETE request to albums/1 should 1.delete album with id 1 from the json file 2.return 200 status code', async () => {
+        const res = await server.delete('/albums/1')
+        expect(res.statusCode).toEqual(200)
+        expect(res.body.success).toBeTruthy
+
+        const getAllRes = await server.get('/albums')
+
+        expect(getAllRes.body.length).toEqual(3)
+        expect(getAllRes.body.includes({
+            albumId: 1,
+            id: 1,
+            title: 'accusamus beatae ad facilis cum similique qui sunt',
+            url: 'https://via.placeholder.com/600/92c952',
+            thumbnailUrl: 'https://via.placeholder.com/150/92c952'
+        })).toBeFalsy
+    })
 
 
 })
