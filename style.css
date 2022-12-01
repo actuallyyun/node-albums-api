@@ -148,7 +148,7 @@ i {
 
 .overflow-hidden {
     position: relative;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .content a {

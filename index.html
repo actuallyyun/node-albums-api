@@ -50,7 +50,7 @@
         <div class="content-menu">
             <div class="content-infos">
                 <div class="info"><b>Version:</b> 1.0.0</div>
-                <div class="info"><b>Last Updated:</b> xxx, 2021</div>
+                <div class="info"><b>Last Updated:</b> 01,12 2021</div>
             </div>
             <ul>
                 <li class="scroll-to-link active" data-target="content-get-started">
@@ -79,10 +79,6 @@
                     The Music Albums API provides programmatic access to read music albums data. Retrieve an album,
                     update an album, and delete an album, etc.
                 </p>
-                <p>
-                    To use this API, you need an <strong>API key</strong>. Please contact us at <a
-                        href="mailto:jon.snow@nightswatch.wes">jon.snow@nightswatch.wes</a> to get your own API key.
-                </p>
             </div>
             <div class="overflow-hidden content-section" id="content-get-characters">
                 <h2>get albums</h2>
@@ -90,13 +86,9 @@
  # Here is a curl example
  curl \
  -X GET https://api.musicalbums.com/albums
- -F 'secret_key=your_api_key' \
- -F 'house=Stark,Bolton' \
- -F 'offset=0' \
- -F 'limit=50'
                  </code></pre>
                 <p>
-                    To get characters you need to make a GET request to the following url :<br>
+                    To get all albums you need to make a GET request to the following url :<br>
                     <code class="higlighted break-word">https://api.musicalbums.com/albums</code>
                 </p>
                 <br>
@@ -129,68 +121,51 @@
    ]
 
                  </code></pre>
-                <h4>QUERY PARAMETERS</h4>
+                <h4>API routes</h4>
                 <table class="central-overflow-x">
                     <thead>
                         <tr>
-                            <th>Field</th>
-                            <th>Type</th>
+                            <th>Route</th>
+                            <th>Request Type</th>
                             <th>Description</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>secret_key</td>
-                            <td>String</td>
-                            <td>Your API key.</td>
+                            <td>/albums</td>
+                            <td>GET</td>
+                            <td>Returns a json file contains all albums.</td>
                         </tr>
                         <tr>
-                            <td>search</td>
-                            <td>String</td>
-                            <td>(optional) A search word to find character by name.</td>
-                        </tr>
-                        <tr>
-                            <td>house</td>
-                            <td>String</td>
-                            <td>
-                                (optional) a string array of houses:
+                            <td>/albums/:id</td>
+                            <td>GET</td>
+                            <td>Returns the album with id. If album does not exist, returns 404 and message "The item
+                                you requested does not exist.".
                             </td>
                         </tr>
                         <tr>
-                            <td>alive</td>
-                            <td>Boolean</td>
+                            <td>/albums</td>
+                            <td>POST</td>
                             <td>
-                                (optional) a boolean to filter alived characters
+                                Creats a new album and returns 201. If album id already exisits, returns 409 and message
+                                ""You cannot create an album with an exisiting id.""
                             </td>
                         </tr>
                         <tr>
-                            <td>gender</td>
-                            <td>String</td>
+                            <td>/albums/:id</td>
+                            <td>DELETE</td>
                             <td>
-                                (optional) a string to filter character by gender:<br>
-                                m: male<br>
-                                f: female
+                                Deletes the album with id and returns 200.
                             </td>
                         </tr>
-                        <tr>
-                            <td>offset</td>
-                            <td>Integer</td>
-                            <td>(optional - default: 0) A cursor for use in pagination. Pagination starts offset the
-                                specified offset.</td>
-                        </tr>
-                        <tr>
-                            <td>limit</td>
-                            <td>Integer</td>
-                            <td>(optional - default: 10) A limit on the number of objects to be returned, between 1 and
-                                100.</td>
-                        </tr>
+
                     </tbody>
                 </table>
             </div>
             <div class="overflow-hidden content-section" id="content-errors">
                 <h2>Errors</h2>
                 <p>
-                    The Westeros API uses the following error codes:
+                    The Music Albums API uses the following error codes:
                 </p>
                 <table>
                     <thead>
@@ -201,33 +176,19 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>X000</td>
+                            <td>400</td>
                             <td>
-                                Some parameters are missing. This error appears when you don't pass every mandatory
-                                parameters.
+                                Item not found due to client-side error. For example, album with requested id does not
+                                exist.
                             </td>
                         </tr>
+
+
                         <tr>
-                            <td>X001</td>
+                            <td>409</td>
                             <td>
-                                Unknown or unvalid <code class="higlighted">secret_key</code>. This error appears if you
-                                use an unknow API key or if your API key expired.
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>X002</td>
-                            <td>
-                                Unvalid <code class="higlighted">secret_key</code> for this domain. This error appears
-                                if you use an API key non specified for your domain. Developper or Universal API keys
-                                doesn't have domain checker.
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>X003</td>
-                            <td>
-                                Unknown or unvalid user <code class="higlighted">token</code>. This error appears if you
-                                use an unknow user <code class="higlighted">token</code> or if the user <code
-                                    class="higlighted">token</code> expired.
+                                The request cannot be processed due to conflict with exisiting code. For example,
+                                request to create an album that alreay exisits.
                             </td>
                         </tr>
                     </tbody>
