@@ -42,9 +42,15 @@ app.post('/albums', (req, res) => {
 app.delete('/albums/:id', (req, res) => {
     const id = req.params.id
     //QQQ:What's the best solution to delete an item from database? Which Array method to use?
-    const filteredAlbums = albums.filter(album => album.id != id)
-    albums = filteredAlbums
-    res.status(200).json({ success: true })
+
+    const albumToDelete = albums.find(album => album.id == id)
+    if (albumToDelete !== undefined) {
+        albums.splice(albumToDelete, 1)
+        res.status(200).json({ success: true })
+
+    } else {
+        res.status(404)
+    }
 
 
 })
