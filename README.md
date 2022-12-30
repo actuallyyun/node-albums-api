@@ -28,6 +28,7 @@ GET /albums/1
 ```
 
 ### Acknowledgements
+
 API documentation templates was created by @Florian Nicolas.
 
 README file is written with the help of ChatGTP. 
@@ -35,3 +36,4 @@ README file is written with the help of ChatGTP.
 This project was inspired by the [MigraCode syllabus Node Module](https://syllabus.migracode.org/courses/introduction-3/course-content/nodejs/week-2).
 
 Thanks to Carlos for reviewing my code and providing invaluable advice. 
+
