@@ -1,8 +1,8 @@
-const request = require('supertest')
-const express = require('express')
+import request from 'supertest'
+import app from './app'
 
-// const app = express()
-const server = request('http://localhost:3000')
+
+const server = request(app)
 
 describe('Server test default route', () => {
     it('test GET /', async () => {

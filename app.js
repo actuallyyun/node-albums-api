@@ -3,7 +3,7 @@ const app = express();
 
 app.use(express.json())
 
-import albums from './albums.json' assert { type: 'json' }
+import albums from './albums.json'
 
 app.get('/', (req, res) => {
     res.send('Hello Express')
