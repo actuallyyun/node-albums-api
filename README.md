@@ -18,12 +18,11 @@ Here is an example of a request to retrieve a specific album:
 
 ```
 GET /albums/1
-{
-    "albumId": 1,
+ {
     "id": 1,
     "title": "accusamus beatae ad facilis cum similique qui sunt",
-    "url": "https://via.placeholder.com/600/92c952",
-    "thumbnailUrl": "https://via.placeholder.com/150/92c952"
+    "artist": "Pink Floyd",
+    "url": "https://via.placeholder.com/600/92c952"
 }
 ```
 
