@@ -1,21 +1,12 @@
-import express from "express";
-const app = express();
+import express from "express"
+import albums from './albums.json' assert  { type: 'json' }
+
+const app = express()
 
 app.use(express.json())
 
-import albums from './albums.json'
 
-app.get('/', (req, res) => {
-    res.send('Hello Express')
-});
-
-
-app.get("/albums", (req, res) => {
-    res.send(albums)
-})
-
-
-app.get("/albums/:id", (req, res) => {
+const getAlbumById = (req, res) => {
     const id = req.params.id
     const album = albums.find(album => album.id == id)
     if (album === undefined) {
@@ -23,10 +14,9 @@ app.get("/albums/:id", (req, res) => {
     } else {
         res.send(album)
     }
+}
 
-})
-
-app.post('/albums', (req, res) => {
+const createNewAlbum = (req, res) => {
     const newAlbum = req.body
     if (albums.find(album => album.id === newAlbum.id)) {
         return res.status(409).send("You cannot create an album with an exisiting id.")
@@ -34,15 +24,10 @@ app.post('/albums', (req, res) => {
         albums.push(newAlbum)
         res.status(201).send(newAlbum)
     }
+}
 
-
-})
-
-
-app.delete('/albums/:id', (req, res) => {
+const deleteAlbumById = (req, res) => {
     const id = req.params.id
-    //QQQ:What's the best solution to delete an item from database? Which Array method to use?
-
     const albumToDelete = albums.find(album => album.id == id)
     if (albumToDelete !== undefined) {
         albums.splice(albumToDelete, 1)
@@ -51,9 +36,21 @@ app.delete('/albums/:id', (req, res) => {
     } else {
         res.status(404)
     }
+}
 
-
+app.get("/", (req, res) => {
+    res.send("Welcome to the music album API.")
 })
+
+app.get("/albums", (req, res) => {
+    res.send(albums)
+})
+
+app.get("/albums/:id", getAlbumById)
+
+app.post('/albums', createNewAlbum)
+
+app.delete('/albums/:id', deleteAlbumById)
 
 
 export default app
