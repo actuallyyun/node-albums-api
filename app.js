@@ -9,22 +9,37 @@ app.use(express.json())
 const getAlbumById = (req, res) => {
     const id = req.params.id
     const album = albums.find(album => album.id == id)
-    if (album === undefined) {
-        res.status(400).send("The item you requested does not exist.")
+    const statusCode = album ? 200 : 400
+
+    res.status(statusCode).send(album)
+
+}
+
+const validAlbum = (album) => {
+    if (album.artist === undefined || album.title === undefined || album.artist === "" || album.title === "") {
+        return false
+    } else if (albums.find(a => a.title.toLocaleLowerCase() === album.title.toLocaleLowerCase())) {
+        return false
     } else {
-        res.send(album)
+        return true
     }
 }
 
 const createNewAlbum = (req, res) => {
-    const newAlbum = req.body
-    if (albums.find(album => album.id === newAlbum.id)) {
-        return res.status(409).send("You cannot create an album with an exisiting id.")
-    } else {
+    const isValid = validAlbum(req.body)
+    const statusCode = isValid ? 201 : 409
+
+    let createdAlbum
+
+    if (isValid) {
+        const newAlbumContent = req.body
+        const newAlbum = { id: albums.length + 1, title: newAlbumContent.title, artist: newAlbumContent.artist, url: newAlbumContent.url }
         albums.push(newAlbum)
-        res.status(201).send(newAlbum)
+        createdAlbum = newAlbum
     }
+    res.status(statusCode).send(createdAlbum)
 }
+
 
 const deleteAlbumById = (req, res) => {
     const id = req.params.id
@@ -43,7 +58,7 @@ app.get("/", (req, res) => {
 })
 
 app.get("/albums", (req, res) => {
-    res.send(albums)
+    res.status(200).send(albums)
 })
 
 app.get("/albums/:id", getAlbumById)
