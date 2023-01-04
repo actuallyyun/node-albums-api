@@ -43,14 +43,31 @@ const createNewAlbum = (req, res) => {
 
 const deleteAlbumById = (req, res) => {
     const id = req.params.id
-    const albumToDelete = albums.find(album => album.id == id)
-    if (albumToDelete !== undefined) {
-        albums.splice(albumToDelete, 1)
-        res.status(200).json({ success: true })
+    const indexToDelete = albums.findIndex(album => album.id == id)
+    const foundIndex = indexToDelete != -1
 
-    } else {
-        res.status(404)
+    const statusCode = foundIndex ? 200 : 404
+
+    const deletedAlbum = foundIndex ? albums[indexToDelete] : (null)
+
+    if (foundIndex) {
+        albums.splice(indexToDelete, 1)
     }
+    res.status(statusCode).send(deletedAlbum)
+}
+
+const updateAlbumById = (req, res) => {
+    const id = req.params.id
+    const album = albums.find(a => a.id == id)
+
+    if (req.body.artist !== undefined) {
+        album.artist = req.body.artist
+    }
+    if (req.body.title !== undefined) {
+        album.title = req.body.title
+    }
+
+    res.status(200).send(album)
 }
 
 app.get("/", (req, res) => {
@@ -66,6 +83,8 @@ app.get("/albums/:id", getAlbumById)
 app.post('/albums', createNewAlbum)
 
 app.delete('/albums/:id', deleteAlbumById)
+
+app.put("/albums/:id", updateAlbumById)
 
 
 export default app
