@@ -1,10 +1,10 @@
 import request from 'supertest'
 import app from './app'
 
-
 const server = request(app)
 
 describe('Server test default route', () => {
+
     it('test GET /', async () => {
         const response = await server.get("/")
         expect(response.text).toEqual('Welcome to the music album API.');
@@ -13,6 +13,7 @@ describe('Server test default route', () => {
 
 
 describe('GET /albums', () => {
+
     it('it should return all albums', async () => {
         const res = await server.get("/albums")
         expect(res.statusCode).toEqual(200)
@@ -43,6 +44,7 @@ describe('GET /albums', () => {
 })
 
 describe('GET one album with id', () => {
+
     it("/albums/2 route should return album with id 2", async () => {
         const res = await server.get('/albums/2')
         expect(res.statusCode).toEqual(200)
@@ -119,10 +121,41 @@ describe('POST /albums to add a new album', () => {
 
 })
 
+
+describe('PUT albums/:id route', () => {
+
+    it('PUT request to albums/1 should 1.update album with id 1 2.return 200 status code 3.updated album', async () => {
+        const res = await server.put('/albums/1').send(
+            {
+                "title": "The Wall"
+            }
+        ).set('Accept', 'application/json')
+
+        console.log(res)
+        expect(res.statusCode).toEqual(200)
+        expect(res.body).toEqual({
+            "id": 1,
+            "title": "The Wall",
+            "artist": "Pink Floyd",
+            "url": "https://via.placeholder.com/600/92c952"
+        })
+
+        const getUpdatedAlbum = await server.get('/albums/1')
+        expect(getUpdatedAlbum.body).toEqual({
+            "id": 1,
+            "title": "The Wall",
+            "artist": "Pink Floyd",
+            "url": "https://via.placeholder.com/600/92c952"
+        })
+    })
+
+
+})
+
 describe('DELETE albums/:id route', () => {
 
-    it('DELETE request to albums/1 should 1.delete album with id 1 from the json file 2.return 200 status code', async () => {
-        const res = await server.delete('/albums/1')
+    it('DELETE request to albums/2 should 1.delete album with id 2 from the json file 2.return 200 status code', async () => {
+        const res = await server.delete('/albums/2')
         expect(res.statusCode).toEqual(200)
         expect(res.body.success).toBeTruthy
 
@@ -130,12 +163,17 @@ describe('DELETE albums/:id route', () => {
 
         expect(getAllRes.body.length).toEqual(3)
         expect(getAllRes.body.includes({
-            "id": 1,
-            "title": "accusamus beatae ad facilis cum similique qui sunt",
+            "id": 2,
+            "title": "reprehenderit est deserunt velit ipsam",
             "artist": "Pink Floyd",
-            "url": "https://via.placeholder.com/600/92c952"
+            "url": "https://via.placeholder.com/600/771796"
         })).toBeFalsy
     })
-
+    it('DELETE a nonexisting album should send statusCode 404, and null', async () => {
+        const res = await server.delete('/albums/10')
+        expect(res.statusCode).toEqual(404)
+        expect(res.body).toBeFalsy
+    })
 
 })
+
